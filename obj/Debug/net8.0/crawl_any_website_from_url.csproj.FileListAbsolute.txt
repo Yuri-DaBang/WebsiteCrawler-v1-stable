@@ -1,0 +1,14 @@
+E:\enchant\sbin\website(s)\crawl_any_website_from_url\bin\Debug\net8.0\crawl_any_website_from_url.exe
+E:\enchant\sbin\website(s)\crawl_any_website_from_url\bin\Debug\net8.0\crawl_any_website_from_url.deps.json
+E:\enchant\sbin\website(s)\crawl_any_website_from_url\bin\Debug\net8.0\crawl_any_website_from_url.runtimeconfig.json
+E:\enchant\sbin\website(s)\crawl_any_website_from_url\bin\Debug\net8.0\crawl_any_website_from_url.dll
+E:\enchant\sbin\website(s)\crawl_any_website_from_url\bin\Debug\net8.0\crawl_any_website_from_url.pdb
+E:\enchant\sbin\website(s)\crawl_any_website_from_url\obj\Debug\net8.0\crawl_any_website_from_url.GeneratedMSBuildEditorConfig.editorconfig
+E:\enchant\sbin\website(s)\crawl_any_website_from_url\obj\Debug\net8.0\crawl_any_website_from_url.AssemblyInfoInputs.cache
+E:\enchant\sbin\website(s)\crawl_any_website_from_url\obj\Debug\net8.0\crawl_any_website_from_url.AssemblyInfo.cs
+E:\enchant\sbin\website(s)\crawl_any_website_from_url\obj\Debug\net8.0\crawl_any_website_from_url.csproj.CoreCompileInputs.cache
+E:\enchant\sbin\website(s)\crawl_any_website_from_url\obj\Debug\net8.0\crawl_any_website_from_url.dll
+E:\enchant\sbin\website(s)\crawl_any_website_from_url\obj\Debug\net8.0\refint\crawl_any_website_from_url.dll
+E:\enchant\sbin\website(s)\crawl_any_website_from_url\obj\Debug\net8.0\crawl_any_website_from_url.pdb
+E:\enchant\sbin\website(s)\crawl_any_website_from_url\obj\Debug\net8.0\crawl_any_website_from_url.genruntimeconfig.cache
+E:\enchant\sbin\website(s)\crawl_any_website_from_url\obj\Debug\net8.0\ref\crawl_any_website_from_url.dll

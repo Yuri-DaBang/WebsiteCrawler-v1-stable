@@ -1,0 +1,96 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
+
+class LinkCrawler
+{
+    private HashSet<string> visitedLinks;
+
+    public LinkCrawler()
+    {
+        visitedLinks = new HashSet<string>();
+    }
+
+    public void Crawl(string url, int maxDepth)
+    {
+        CrawlInternal(url, 0, maxDepth);
+    }
+
+    private void CrawlInternal(string url, int depth, int maxDepth)
+    {
+        try
+        {
+            if (depth > maxDepth || visitedLinks.Contains(url))
+                return;
+
+            visitedLinks.Add(url);
+            Console.WriteLine("Visiting: " + url);
+
+            WebClient webClient = new WebClient();
+            string pageContent = webClient.DownloadString(url);
+
+            List<string> links = ExtractLinks(pageContent);
+            foreach (string link in links)
+            {
+                CrawlInternal(link, depth + 1, maxDepth);
+            }
+        }
+        catch
+        {
+            if (depth > maxDepth || visitedLinks.Contains(url))
+                return;
+
+            visitedLinks.Remove(url);
+            Console.WriteLine("Visited and not found more on : " + url);
+        }
+    }
+
+    private List<string> ExtractLinks(string pageContent)
+    {
+        // Replace this logic with a proper HTML parsing library for robustness
+        List<string> links = new List<string>();
+        string linkStartTag = "href=\"";
+        int startIndex = 0;
+
+        while (true)
+        {
+            startIndex = pageContent.IndexOf(linkStartTag, startIndex);
+            if (startIndex == -1)
+                break;
+
+            startIndex += linkStartTag.Length;
+            int endIndex = pageContent.IndexOf("\"", startIndex);
+            if (endIndex == -1)
+                break;
+
+            string link = pageContent.Substring(startIndex, endIndex - startIndex);
+            links.Add(link);
+
+            startIndex = endIndex + 1;
+        }
+
+        return links;
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        // Create an instance of the LinkCrawler class
+        LinkCrawler crawler = new LinkCrawler();
+
+
+        string linkhahahahah = Console.ReadLine();
+
+        // Specify the starting URL and maximum depth
+        string startingUrl = linkhahahahah;
+        int maxDepth = 3;
+
+        // Start crawling
+        crawler.Crawl(startingUrl, maxDepth);
+
+        Console.WriteLine("Crawling completed.");
+        Console.ReadLine();
+    }
+}

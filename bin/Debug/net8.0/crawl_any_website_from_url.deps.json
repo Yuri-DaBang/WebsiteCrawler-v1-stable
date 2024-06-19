@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "crawl_any_website_from_url/1.0.0": {
+        "runtime": {
+          "crawl_any_website_from_url.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "crawl_any_website_from_url/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

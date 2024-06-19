@@ -1,0 +1,79 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+
+class Program
+{
+    static async Task Main()
+    {
+        string url = Prompt("Enter the URL of the website to crawl: ");
+        string keyword = Prompt("Enter the keyword or bug to search for: ");
+
+        var crawledUrls = new HashSet<string>();
+        var httpClient = new HttpClient();
+
+        await Crawl(url, keyword, crawledUrls, httpClient);
+
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.Write("\n[!] ");
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine("Crawling completed.");
+    }
+
+    static async Task Crawl(string url, string keyword, HashSet<string> crawledUrls, HttpClient httpClient)
+    {
+        if (crawledUrls.Contains(url))
+            return;
+
+        crawledUrls.Add(url);
+
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.Write("\n[+] ");
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.Write("Crawling: " + url);
+
+        try
+        {
+            var response = await httpClient.GetAsync(url);
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            // Search for the keyword in the response content
+            if (responseContent.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write("\n[+] ");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write("[!!!] ");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write("Found keyword '{0}' at: {1}", keyword, url);
+            }
+
+            // Extract all anchor tags from the response content
+            var anchorTags = Regex.Matches(responseContent, @"<a\s+[^>]*?href\s*=\s*[""']([^""'#>]+)[""']", RegexOptions.IgnoreCase);
+
+            foreach (Match match in anchorTags)
+            {
+                var href = match.Groups[1].Value;
+                var absoluteUri = new Uri(new Uri(url), href).AbsoluteUri;
+
+                // Recursively crawl the absolute URL
+                await Crawl(absoluteUri, keyword, crawledUrls, httpClient);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("\n[-] ");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("Error crawling URL '{0}': {1}", url, ex.Message);
+        }
+    }
+
+    static string Prompt(string message)
+    {
+        Console.Write(message);
+        return Console.ReadLine();
+    }
+}

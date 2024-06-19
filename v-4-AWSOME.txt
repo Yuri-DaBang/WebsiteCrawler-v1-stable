@@ -1,0 +1,139 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
+
+class LinkCrawler
+{
+    private HashSet<string> visitedLinks;
+
+    public LinkCrawler()
+    {
+        visitedLinks = new HashSet<string>();
+    }
+
+    public void Crawl(string url, int maxDepth)
+    {
+        CrawlInternal(url, 0, maxDepth);
+    }
+
+    private void CrawlInternal(string url, int depth, int maxDepth)
+    {
+        try
+        {
+            if (depth > maxDepth || visitedLinks.Contains(url))
+                return;
+
+            visitedLinks.Add(url);
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write("\n[+] ");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("Visiting: " + url);
+
+            WebClient webClient = new WebClient();
+            string pageContent = webClient.DownloadString(url);
+
+            List<string> links = ExtractLinks(pageContent, "a", "href");
+            List<string> cssLinks = ExtractLinks(pageContent, "link", "href");
+            List<string> jsLinks = ExtractLinks(pageContent, "script", "src");
+
+            foreach (string link in links)
+            {
+                CrawlInternal(link, depth + 1, maxDepth);
+            }
+
+            foreach (string cssLink in cssLinks)
+            {
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write("\n[+] ");
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write("[css] ");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write("CSS Link: " + cssLink);
+            }
+
+            foreach (string jsLink in jsLinks)
+            {
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write("\n[+] ");
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.Write("[js] ");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write("JavaScript Link: " + jsLink);
+            }
+        }
+        catch 
+        {
+            if (depth > maxDepth || visitedLinks.Contains(url))
+                return;
+
+            visitedLinks.Add(url);
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write("\n[+] ");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("[!] ");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("VISITED BUT NOT FOUND MORE LINKS :" + url);
+        }
+    }
+
+    private List<string> ExtractLinks(string pageContent, string tag, string attributeName)
+    {
+        List<string> links = new List<string>();
+        string startTag = "<" + tag;
+        string endTag = "</" + tag + ">";
+        int startIndex = 0;
+
+        while (true)
+        {
+            startIndex = pageContent.IndexOf(startTag, startIndex);
+            if (startIndex == -1)
+                break;
+
+            int endIndex = pageContent.IndexOf(">", startIndex);
+            if (endIndex == -1)
+                break;
+
+            string tagContent = pageContent.Substring(startIndex, endIndex - startIndex + 1);
+
+            int attributeStartIndex = tagContent.IndexOf(attributeName + "=\"");
+            if (attributeStartIndex != -1)
+            {
+                attributeStartIndex += attributeName.Length + 2;
+                int attributeEndIndex = tagContent.IndexOf("\"", attributeStartIndex);
+                if (attributeEndIndex != -1)
+                {
+                    string link = tagContent.Substring(attributeStartIndex, attributeEndIndex - attributeStartIndex);
+                    links.Add(link);
+                }
+            }
+
+            startIndex = endIndex + 1;
+        }
+
+        return links;
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        // Create an instance of the LinkCrawler class
+        LinkCrawler crawler = new LinkCrawler();
+
+        Console.Write("the url of the target website (input) >>> ");
+        string urlofthedoomhahhahah = Console.ReadLine();
+
+        // Specify the starting URL and maximum depth
+        string startingUrl = urlofthedoomhahhahah;
+        int maxDepth = 3;
+
+        // Start crawling
+        crawler.Crawl(startingUrl, maxDepth);
+
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.Write("\n[!] ");
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.Write("Crawling completed.");
+    }
+}
